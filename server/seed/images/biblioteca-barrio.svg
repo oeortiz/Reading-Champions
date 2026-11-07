@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <defs>
+    <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#EDF1F7"/>
+      <stop offset="1" stop-color="#DCE3EE"/>
+    </linearGradient>
+    <linearGradient id="window" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#CFE2F6"/>
+      <stop offset="1" stop-color="#EEF5FC"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#wall)"/>
+  <rect y="262" width="400" height="38" fill="#B8C3D3"/>
+  <!-- Ventana -->
+  <rect x="290" y="34" width="84" height="104" rx="6" fill="#4A5568"/>
+  <rect x="297" y="41" width="70" height="90" rx="3" fill="url(#window)"/>
+  <rect x="330" y="41" width="4" height="90" fill="#4A5568"/>
+  <rect x="297" y="84" width="70" height="4" fill="#4A5568"/>
+  <!-- Estanteria -->
+  <rect x="30" y="30" width="236" height="232" rx="6" fill="#3E4A5E"/>
+  <rect x="40" y="40" width="216" height="212" fill="#2C3647"/>
+  <rect x="40" y="108" width="216" height="8" fill="#55627A"/>
+  <rect x="40" y="180" width="216" height="8" fill="#55627A"/>
+  <!-- Libros, estante superior -->
+  <rect x="48" y="56" width="16" height="52" rx="2" fill="#2F5BD3"/>
+  <rect x="66" y="50" width="20" height="58" rx="2" fill="#2B8C99"/>
+  <rect x="88" y="62" width="14" height="46" rx="2" fill="#2E7D5B"/>
+  <rect x="104" y="54" width="18" height="54" rx="2" fill="#B23A48"/>
+  <rect x="124" y="58" width="16" height="50" rx="2" fill="#5B6B8C"/>
+  <path d="M146 108l14-50 14 4-14 50z" fill="#7FA7E8"/>
+  <rect x="182" y="52" width="20" height="56" rx="2" fill="#6B4FA0"/>
+  <rect x="204" y="60" width="14" height="48" rx="2" fill="#DCE3EE"/>
+  <rect x="220" y="56" width="18" height="52" rx="2" fill="#2E7D5B"/>
+  <!-- Estante medio -->
+  <rect x="48" y="128" width="20" height="52" rx="2" fill="#B23A48"/>
+  <rect x="70" y="134" width="14" height="46" rx="2" fill="#DCE3EE"/>
+  <rect x="86" y="124" width="18" height="56" rx="2" fill="#2F5BD3"/>
+  <rect x="106" y="130" width="16" height="50" rx="2" fill="#2B8C99"/>
+  <rect x="124" y="136" width="66" height="14" rx="2" fill="#5B6B8C"/>
+  <rect x="128" y="150" width="58" height="14" rx="2" fill="#2E7D5B"/>
+  <rect x="124" y="164" width="64" height="16" rx="2" fill="#6B4FA0"/>
+  <rect x="196" y="126" width="18" height="54" rx="2" fill="#7FA7E8"/>
+  <rect x="216" y="132" width="16" height="48" rx="2" fill="#2F5BD3"/>
+  <!-- Estante inferior -->
+  <rect x="48" y="198" width="18" height="54" rx="2" fill="#2E7D5B"/>
+  <rect x="68" y="204" width="16" height="48" rx="2" fill="#2B8C99"/>
+  <rect x="86" y="196" width="20" height="56" rx="2" fill="#5B6B8C"/>
+  <rect x="108" y="206" width="14" height="46" rx="2" fill="#B23A48"/>
+  <rect x="124" y="200" width="18" height="52" rx="2" fill="#2F5BD3"/>
+  <!-- Planta -->
+  <path d="M206 252h36l-5-26h-26z" fill="#3E5C9A"/>
+  <path d="M224 226c-4-18-18-26-30-24 8 6 14 14 18 24z" fill="#2E7D5B"/>
+  <path d="M224 226c2-20 14-32 28-32-8 8-14 20-16 32z" fill="#3F9B6E"/>
+  <path d="M224 226c0-14 0-24-6-34 10 8 12 20 10 34z" fill="#2E7D5B"/>
+  <!-- Libro abierto sobre una mesa baja -->
+  <rect x="284" y="226" width="96" height="10" rx="3" fill="#4A5568"/>
+  <rect x="294" y="236" width="8" height="26" fill="#3E4757"/>
+  <rect x="362" y="236" width="8" height="26" fill="#3E4757"/>
+  <path d="M296 224c12-8 26-8 36-2v4c-10-4-24-4-36 2z" fill="#FFFFFF"/>
+  <path d="M332 222c10-6 24-6 36 2v4c-12-6-26-6-36-2z" fill="#E6ECF5"/>
+</svg>

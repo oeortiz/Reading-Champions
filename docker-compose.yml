@@ -1,0 +1,89 @@
+# Reading Champions
+#
+# Desarrollo:  docker compose --profile dev up
+#              (API en http://localhost:3000, SPA con Vite en http://localhost:5173)
+# Pruebas:     docker compose --profile dev run --rm server bun test
+# Produccion:  docker compose --profile prod up -d --build
+#              docker compose --profile prod run --rm app bun run seed
+
+name: reading-champions
+
+x-dev-app: &dev-app
+  image: reading-champions-dev
+  build:
+    context: .
+    target: dev
+  env_file: .env
+  working_dir: /app
+  volumes:
+    - .:/app
+    - node_modules:/app/node_modules
+    - server_node_modules:/app/server/node_modules
+    - web_node_modules:/app/web/node_modules
+  profiles: ["dev"]
+
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-reading}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-reading}
+      POSTGRES_DB: ${POSTGRES_DB:-reading_champions}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  # Instala dependencias en los volumenes de node_modules y termina
+  deps:
+    <<: *dev-app
+    command: ["bun", "install"]
+
+  server:
+    <<: *dev-app
+    command: ["sh", "-c", "bun run migrate && bun run --cwd server dev"]
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+      deps:
+        condition: service_completed_successfully
+
+  web:
+    <<: *dev-app
+    command: ["bun", "run", "--cwd", "web", "dev", "--host", "0.0.0.0"]
+    environment:
+      API_PROXY_TARGET: http://server:3000
+      # Los cambios en /mnt/c no generan eventos de inotify dentro del contenedor
+      CHOKIDAR_USEPOLLING: "true"
+    ports:
+      - "5173:5173"
+    depends_on:
+      deps:
+        condition: service_completed_successfully
+
+  app:
+    build:
+      context: .
+      target: prod
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      NODE_ENV: production
+    ports:
+      - "${APP_PORT:-3000}:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+    profiles: ["prod"]
+
+volumes:
+  pgdata:
+  node_modules:
+  server_node_modules:
+  web_node_modules:

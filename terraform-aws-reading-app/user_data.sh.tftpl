@@ -1,0 +1,88 @@
+#!/bin/bash
+# Arranque inicial de la instancia: Docker, Compose y la app con Postgres.
+set -euo pipefail
+exec > >(tee /var/log/reading-app-init.log) 2>&1
+
+# Swap de 1 GB: la t3.micro solo tiene 1 GB de RAM
+if [ ! -f /swapfile ]; then
+  dd if=/dev/zero of=/swapfile bs=1M count=1024
+  chmod 600 /swapfile
+  mkswap /swapfile
+  swapon /swapfile
+  echo '/swapfile none swap defaults 0 0' >> /etc/fstab
+fi
+
+# Al asociarse la Elastic IP la red se corta unos segundos: esperar y reintentar
+sleep 45
+for i in $(seq 1 10); do dnf install -y docker && break; sleep 10; done
+systemctl enable --now docker
+
+mkdir -p /usr/local/lib/docker/cli-plugins
+curl -fsSL --retry 10 --retry-delay 5 --retry-all-errors https://github.com/docker/compose/releases/download/v2.29.7/docker-compose-linux-x86_64 \
+  -o /usr/local/lib/docker/cli-plugins/docker-compose
+chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
+
+mkdir -p /opt/reading-app
+cd /opt/reading-app
+
+cat > .env <<'ENVEOF'
+POSTGRES_USER=${db_user}
+POSTGRES_PASSWORD=${db_password}
+POSTGRES_DB=${db_name}
+DATABASE_URL=postgres://${db_user}:${db_password}@db:5432/${db_name}
+SESSION_SECRET=${session_secret}
+ADMIN_USERNAME=${admin_username}
+ADMIN_PASSWORD=${admin_password}
+COOKIE_SECURE=true
+NODE_ENV=production
+ENVEOF
+chmod 600 .env
+
+cat > docker-compose.yml <<'COMPOSEEOF'
+name: reading-app
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+    mem_limit: 300m
+
+  app:
+    image: ${image}
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "80:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+    mem_limit: 400m
+
+volumes:
+  pgdata:
+COMPOSEEOF
+
+# Script de actualizacion: login en ECR, descarga la ultima imagen y reinicia
+cat > update.sh <<'UPDEOF'
+#!/bin/bash
+set -euo pipefail
+cd /opt/reading-app
+aws ecr get-login-password --region ${region} | docker login --username AWS --password-stdin ${registry}
+docker compose pull app
+docker compose up -d
+docker image prune -f
+UPDEOF
+chmod +x update.sh
+
+# La imagen puede tardar en estar disponible: reintenta
+for i in $(seq 1 20); do
+  ./update.sh && break
+  sleep 15
+done

@@ -1,0 +1,12 @@
+{
+  "name": "reading-champions",
+  "private": true,
+  "workspaces": ["server", "web"],
+  "scripts": {
+    "dev": "bun run --filter '*' dev",
+    "test": "bun run --filter server test",
+    "migrate": "bun run --filter server migrate",
+    "seed": "bun run --filter server seed",
+    "build": "bun run --filter web build"
+  }
+}

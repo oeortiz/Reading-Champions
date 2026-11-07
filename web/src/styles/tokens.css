@@ -1,0 +1,76 @@
+/* Tokens del sistema visual: hoja de cuaderno (papel blanco, renglones azules, margen rosa, tinta azul).
+   Los componentes usan solo estas variables, nunca colores literales. */
+:root {
+  --bg: #eef1f5;
+  --paper: #ffffff;
+  --surface: #ffffff;
+  --ink: #1b2232;
+  --ink-muted: #586174;
+  --border: #dde2ea;
+  --border-strong: #7e8798;
+  --accent: #1f48c9;
+  --accent-hover: #183aa6;
+  --on-accent: #ffffff;
+  --accent-soft: #eaf0fd;
+  --rule: #d3def0;
+  --margin-line: #e8a2ae;
+  --target-bg: #dde6ff;
+  --target-line: #1f48c9;
+  --ok: #17663f;
+  --ok-bg: #e5f4ec;
+  --bad: #b3261e;
+  --bad-bg: #fce9e8;
+  --neutral-bg: #eef1f5;
+
+  --font-reading: "Literata Variable", Georgia, "Times New Roman", serif;
+  --font-ui: "Atkinson Hyperlegible Next Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Escala de 4 px */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+
+  /* Alto de renglon del cuaderno: el texto de lectura se escribe sobre esta pauta */
+  --line: 32px;
+
+  --radius-card: 6px;
+  --radius-control: 8px;
+  --control-height: 44px;
+
+  /* Curvas de la skill de Emil Kowalski */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #161a22;
+    --paper: #1c212b;
+    --surface: #1c212b;
+    --ink: #e5e8ee;
+    --ink-muted: #a2aaba;
+    --border: #2c3443;
+    --border-strong: #6b7488;
+    --accent: #93aaff;
+    --accent-hover: #b4c4ff;
+    --on-accent: #0d1430;
+    --accent-soft: #222c4a;
+    --rule: #2a3346;
+    --margin-line: #6b3a46;
+    --target-bg: #2a3a66;
+    --target-line: #93aaff;
+    --ok: #7fd6a6;
+    --ok-bg: #133022;
+    --bad: #f4a7a7;
+    --bad-bg: #3a1b1d;
+    --neutral-bg: #232937;
+    color-scheme: dark;
+  }
+}
